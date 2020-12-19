@@ -7,20 +7,18 @@ import 'package:fsdh_xpense/utilities/Constants.dart';
 import 'package:fsdh_xpense/view/MyExpensesScreen.dart';
 import 'package:fsdh_xpense/view/SpendingPatternScreen.dart';
 
-import 'MyBudget.dart';
-
-class HomeScreen extends StatefulWidget {
+class MyBudgetScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _MyBudgetScreenState createState() => _MyBudgetScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MyBudgetScreenState extends State<MyBudgetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.primaryColor,
       appBar: AppBar(
-        title: Text("All connected accounts",),
+        title: Text("My budget",),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -67,11 +65,63 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _displayBanksConnected(BuildContext context){
     return Container(
       margin: EdgeInsets.only(top: 30),
-      child: ListView.builder(
-          itemCount: 2,
-          itemBuilder: (BuildContext context,int index){
-            return BankCard(onTap: () =>_modalBottomSheetMenu(context));
-          }
+      child: Column(
+        children: [
+          BankCard(),
+          SizedBox(height: 20,),
+          Expanded(
+            child: ListView.builder(
+                itemCount: 4,
+                itemBuilder: (BuildContext context,int index){
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 25, left: 10, right: 10, ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(
+                              border: Border(bottom: BorderSide(color: Colors.transparent, width: .5))
+                          ),
+                          child: CircleAvatar(
+                            radius: 28,
+                            backgroundImage: NetworkImage("https://miro.medium.com/max/4000/1*dapNzEzbJ-dgIloET3h8xA.jpeg"),
+                          ),
+                        ),
+                        SizedBox(width: 20,),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 15),
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(color: Constants.greyishBlueColor, width: .5))
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                  Text("Electricity", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.ashColor),),
+                                   Text("N2,000 left", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.ashColor),)
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text("N3,000", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.ashColor),),
+                                    Text("12:55", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.ashColor),)
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+            ),
+          )
+        ],
       ),
     );
   }
@@ -93,11 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyBudgetScreen()));
-                      },
-                      child: Text("Plan a budget", style: TextStyle( fontSize: 20,fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
+                  Text("Plan a budget", style: TextStyle( fontSize: 20,fontWeight: FontWeight.bold, color: Constants.whiteColor),),
                   GestureDetector(
                       onTap: (){
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyExpensesScreen()));
