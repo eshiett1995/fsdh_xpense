@@ -52,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   data : "Sign up",
                   color: Constants.secondaryColor,
                   textColor :Constants.whiteColor,
-                  onPressed: () async{
+                  onPressed: (){
                   },
                 ),
                 SizedBox(height: 20,),
