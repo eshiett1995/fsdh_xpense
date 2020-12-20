@@ -25,6 +25,20 @@ class _SpendingPatternScreenState extends State<SpendingPatternScreen> {
                 child: Image.network(
                     "https://quickchart.io/chart?c={type:'pie',data:{labels:['Food','School', 'Movies','Church', 'Sport'], datasets:[{data:[50,60,70,180,190]}]}}",
                   width: double.infinity,
+                    loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 115,
+                        width: 115,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null ?
+                              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                  : null,
+                            )
+                        ),
+                      );
+                    }
                 ),
             ),
             SizedBox(height: 15,),

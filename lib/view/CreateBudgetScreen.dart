@@ -16,26 +16,11 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
   Budget budget;
 
   TextEditingController name = TextEditingController();
-  TextEditingController amount = TextEditingController();
-
-  RangeValues _values = RangeValues(1, 100000);
-  TextEditingController searchTextEditController;
-  bool showPreviousSearches = false;
-  bool showSearchResults = false;
-  var searchedStrings = ["Micheal Jackson", "A good time"];
+  double amount = 0;
 
   @override
   void initState() {
     super.initState();
-    searchTextEditController = TextEditingController();
-    searchTextEditController.addListener(() {
-      if (searchTextEditController.text.isEmpty) {
-        showPreviousSearches = true;
-      } else {
-        showSearchResults = true;
-      }
-      setState(() {});
-    });
   }
 
   @override
@@ -74,7 +59,48 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
             SizedBox(
               height: 20,
             ),
-            CustomTextField(label: "Amount", controller: amount),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Price",
+                  style: TextStyle(
+                    color: Constants.ashColor,
+                    fontSize: 15,
+                  ),
+                ),
+                Text(
+                  "Range ₦0 - ₦100,000",
+                  style: TextStyle(
+                    color: Constants.secondaryColor,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              height: 40,
+              decoration: BoxDecoration(
+                  color: Constants.greyishBlueColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: SliderTheme(
+                data: SliderThemeData(
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 13)),
+                child: Slider(
+                  min: 0,
+                  max: 100000,
+                  value: amount,
+                  inactiveColor: Constants.primaryColor,
+                  activeColor: Constants.secondaryColor,
+                  onChanged: (value) => setState(() {
+                    amount = value;
+                  }),
+                ),
+              ),
+            ),
             SizedBox(
               height: 40,
             ),
@@ -106,48 +132,8 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
             SizedBox(
               height: 40,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Price",
-                  style: TextStyle(
-                    color: Constants.ashColor,
-                    fontSize: 15,
-                  ),
-                ),
-                Text(
-                  "Range ₦${_values.start.toInt()} - ₦${_values.end.toInt()}",
-                  style: TextStyle(
-                    color: Constants.secondaryColor,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            ),
             SizedBox(
               height: 10,
-            ),
-            Container(
-              height: 40,
-              decoration: BoxDecoration(
-                  color: Constants.greyishBlueColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: SliderTheme(
-                data: SliderThemeData(
-                    rangeThumbShape: CustomRangeThumb(),
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 13)),
-                child: RangeSlider(
-                  min: 1,
-                  max: 100000,
-                  values: _values,
-                  inactiveColor: Constants.primaryColor,
-                  activeColor: Constants.secondaryColor,
-                  onChanged: (values) => setState(() {
-                    _values = values;
-                  }),
-                ),
-              ),
             ),
             Expanded(child: SizedBox()),
             CustomButton(
@@ -155,15 +141,14 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
               color: Constants.secondaryColor,
               textColor: Constants.whiteColor,
               onPressed: () {
-                print(amount.value.text);
                 var budgetBox = Hive.box<Budget>("budgets");
                 budget = new Budget(
                   id: budgetBox.values.length + 1,
                   name: name.value.text,
-                  amount: double.parse(amount.value.text),
+                  amount: amount,
                   period: "once",
                   time: DateTime.now().millisecondsSinceEpoch,
-                  remaining: double.parse(amount.value.text),
+                  remaining: amount,
                 );
 
                 budgetBox.put(budgetBox.values.length + 1, budget);

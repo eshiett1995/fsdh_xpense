@@ -6,10 +6,8 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
   final Key key;
-  final Function onTap;
-  final bool readOnly;
 
-  CustomTextField({this.label, this.controller, this.key, this.onTap, this.readOnly = false});
+  CustomTextField({this.label, this.controller, this.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +19,6 @@ class CustomTextField extends StatelessWidget {
               child: Text(this.label, style: TextStyle(color: Constants.ashColor, fontSize: 15, fontWeight: FontWeight.w600),)),
           SizedBox(height: 10,),
           TextFormField(
-            readOnly: this.readOnly,
-            onTap: () => this.onTap == null ? null : this.onTap(),
             style: TextStyle(color: Constants.whiteColor),
             validator: (value){
               if (value.isEmpty) {

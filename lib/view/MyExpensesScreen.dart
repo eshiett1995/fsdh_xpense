@@ -25,6 +25,20 @@ class _MyExpensesScreenState extends State<MyExpensesScreen> {
                 child: Image.network(
                     "https://quickchart.io/chart?c={type:'bar',data:{labels:['January','February', 'March','April', 'May'], datasets:[{label:'Debit',data:[50,60,70,180,190]},{label:'Credit',data:[100,200,300,400,500]}]}}",
                   width: double.infinity,
+                    loadingBuilder:(BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: 115,
+                        width: 115,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null ?
+                              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                                  : null,
+                            )
+                        ),
+                      );
+                    }
                 ),
             ),
             SizedBox(height: 15,),

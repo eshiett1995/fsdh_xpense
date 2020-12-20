@@ -8,11 +8,10 @@ class CustomButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final Function onPressed;
-  final String icon;
   final bool isLoading;
 
   CustomButton(
-      {this.data, this.color, this.textColor, this.onPressed, this.icon, this.isLoading = false });
+      {this.data, this.color, this.textColor, this.onPressed, this.isLoading = false });
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +27,10 @@ class CustomButton extends StatelessWidget {
             width: double.infinity,
             child: this.isLoading ?  DualRingSpinner()
                 :
-            this.icon == null
-                ? Center(
+             Center(
                     child: Text(
                     this.data,
                     style: TextStyle(fontSize: 20, color: this.textColor),
-                  ))
-                : Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      new Image.asset(
-                        this.icon,
-                        height: 20.0,
-                        width: 20.0,
-                        fit: BoxFit.cover,
-                      ),
-                      SizedBox(width: 15.0,),
-                      Text(
-                        this.data,
-                        style: TextStyle(fontSize: 20, color: this.textColor),
-                      ),
-                    ],
                   ))));
   }
 }

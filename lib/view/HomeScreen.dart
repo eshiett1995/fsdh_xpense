@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:fsdh_xpense/components/BankCard.dart';
-import 'package:fsdh_xpense/components/CustomDialogBox.dart';
 import 'package:fsdh_xpense/models/Account.dart';
 import 'package:fsdh_xpense/utilities/Constants.dart';
 import 'package:fsdh_xpense/view/MyExpensesScreen.dart';
@@ -36,36 +35,22 @@ class _HomeScreenState extends State<HomeScreen> {
             return box.values.length == 0 ? _noBanksConnected() : _displayBanksConnected(context, box);
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        // isExtended: true,
-        child: Icon(Icons.add),
-        backgroundColor: Constants.secondaryColor,
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomDialogBox(
-                  icon: "assets/images/bell-ring.png",
-                  title: "Choose a provider",
-                  descriptions:
-                  "A provider helps you connect\nyour banking bank accounts seamlessly\nwith us\n",
-                  buttonText: "Connect with Okra",
-                  onConfirm: (){},
-                  cancelText: "Automatically Generate",
-                  onCancel: () async{
-                       String jsonString = await rootBundle.loadString("assets/json/accounts.json");
-                       final jsonResponse = jsonDecode(jsonString);
-                       var accountsJson = jsonResponse["accounts"] as List;
-                       List<Account> accounts = accountsJson.map((i) => Account.fromJson(i)).toList();
-                       var accountBox = Hive.box<Account>("accounts");
-                       print(accountBox.values.length);
-                       Account account = accounts.elementAt(accountBox.values.length)..selected = true;
-                       accountBox.put(account.id, account);
-                  },
-                  color: Constants.secondaryColor,
-                );
-              });
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: FloatingActionButton(
+          // isExtended: true,
+          child: Icon(Icons.add),
+          backgroundColor: Constants.secondaryColor,
+          onPressed: () async{
+            String jsonString = await rootBundle.loadString("assets/json/accounts.json");
+            final jsonResponse = jsonDecode(jsonString);
+            var accountsJson = jsonResponse["accounts"] as List;
+            List<Account> accounts = accountsJson.map((i) => Account.fromJson(i)).toList();
+            var accountBox = Hive.box<Account>("accounts");
+            Account account = accounts.elementAt(accountBox.values.length)..selected = true;
+            accountBox.put(account.id, account);
+          },
+        ),
       ),
     );
   }
