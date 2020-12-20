@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fsdh_xpense/components/CustomButton.dart';
 import 'package:fsdh_xpense/components/CustomTextField.dart';
 import 'package:fsdh_xpense/components/OptionTag.dart';
+import 'package:fsdh_xpense/models/Account.dart';
+import 'package:fsdh_xpense/models/Budget.dart';
 import 'package:fsdh_xpense/utilities/Constants.dart';
+import 'package:hive/hive.dart';
 
 class CreateBudgetScreen extends StatefulWidget {
   @override
@@ -10,6 +13,11 @@ class CreateBudgetScreen extends StatefulWidget {
 }
 
 class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
+  Budget budget;
+
+  TextEditingController name = TextEditingController();
+  TextEditingController amount = TextEditingController();
+
   RangeValues _values = RangeValues(1, 100000);
   TextEditingController searchTextEditController;
   bool showPreviousSearches = false;
@@ -59,10 +67,17 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
             SizedBox(
               height: 22,
             ),
-            CustomTextField(label: "Name", controller: TextEditingController(), ),
-            SizedBox(height: 20,),
-            CustomTextField(label: "Amount", controller: TextEditingController()),
-            SizedBox(height: 40,),
+            CustomTextField(
+              label: "Name",
+              controller: name,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            CustomTextField(label: "Amount", controller: amount),
+            SizedBox(
+              height: 40,
+            ),
             Text(
               "Dates",
               style: TextStyle(
@@ -75,7 +90,6 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
             ),
             Row(
               children: [
-
                 OptionTag(
                   text: "This week",
                   margin: EdgeInsets.only(right: 10),
@@ -140,7 +154,19 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
               data: "Save budget",
               color: Constants.secondaryColor,
               textColor: Constants.whiteColor,
-              onPressed: (){
+              onPressed: () {
+                print(amount.value.text);
+                var budgetBox = Hive.box<Budget>("budgets");
+                budget = new Budget(
+                  id: budgetBox.values.length + 1,
+                  name: name.value.text,
+                  amount: double.parse(amount.value.text),
+                  period: "once",
+                  time: DateTime.now().millisecondsSinceEpoch,
+                  remaining: double.parse(amount.value.text),
+                );
+
+                budgetBox.put(budgetBox.values.length + 1, budget);
                 Navigator.of(context).pop();
               },
             )
@@ -149,23 +175,7 @@ class _CreateBudgetScreenState extends State<CreateBudgetScreen> {
       ),
     );
   }
-
-  _selectDate(BuildContext context) async {
-    DateTime selectedDate = DateTime.now();
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
 }
-
-
 
 class CustomRangeThumb extends RangeSliderThumbShape {
   static const double _thumbSize = 10.0;
@@ -187,7 +197,9 @@ class CustomRangeThumb extends RangeSliderThumbShape {
       bool isPressed}) {
     final Canvas canvas = context.canvas;
 
-    canvas.drawCircle(Offset(center.dx, center.dy), 13, Paint()..color = Constants.secondaryColor);
-    canvas.drawCircle(Offset(center.dx, center.dy), 9, Paint()..color = Constants.whiteColor);
+    canvas.drawCircle(Offset(center.dx, center.dy), 13,
+        Paint()..color = Constants.secondaryColor);
+    canvas.drawCircle(
+        Offset(center.dx, center.dy), 9, Paint()..color = Constants.whiteColor);
   }
 }

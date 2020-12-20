@@ -26,7 +26,7 @@ class BankCard extends StatelessWidget {
             gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.centerRight,
-                colors: [Colors.deepOrangeAccent, Colors.orangeAccent])
+                colors: _getBankColor(this.account.bank))
         ),
 
         height: 150,
@@ -61,5 +61,15 @@ class BankCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Color> _getBankColor(bank){
+
+    switch(bank){
+      case "GT bank" : return [Colors.deepOrangeAccent, Colors.orangeAccent];
+      case "Heritage bank" : return [Colors.lightGreen, Colors.greenAccent];
+      case "Zenith bank" : return [Colors.redAccent, Colors.red];
+    }
+
   }
 }

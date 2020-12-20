@@ -17,6 +17,16 @@
       "cardNumber" : "5099 5050 9999 5050 6666",
       "expiry" : "06/24",
       "balance": 20000.00,
+      "bank": "Heritage bank",
+      "selected" : false
+    },
+    {
+      "id" : 3,
+      "name" : "Rashford Mbappe",
+      "nuban": "499348575-SE",
+      "cardNumber" : "9485 5050 4945 1344 0985",
+      "expiry" : "06/24",
+      "balance": 500.00,
       "bank": "Zenith bank",
       "selected" : false
     }

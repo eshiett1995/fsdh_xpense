@@ -26,7 +26,7 @@ class Account extends HiveObject {
 
 class AccountAdapter extends TypeAdapter<Account> {
   @override
-  final typeId = 3;
+  final typeId = 0;
 
   @override
   Account read(BinaryReader reader) {

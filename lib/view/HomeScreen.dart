@@ -53,12 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   onConfirm: (){},
                   cancelText: "Automatically Generate",
                   onCancel: () async{
-                       print("hehe");
                        String jsonString = await rootBundle.loadString("assets/json/accounts.json");
                        final jsonResponse = jsonDecode(jsonString);
                        var accountsJson = jsonResponse["accounts"] as List;
                        List<Account> accounts = accountsJson.map((i) => Account.fromJson(i)).toList();
                        var accountBox = Hive.box<Account>("accounts");
+                       print(accountBox.values.length);
                        Account account = accounts.elementAt(accountBox.values.length)..selected = true;
                        accountBox.put(account.id, account);
                   },
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("You have no connected account", style: TextStyle(color: Constants.whiteColor),),
+          Text("You have no connected account \n Click button below to generate", style: TextStyle(color: Constants.whiteColor),),
 
         ],),
     );
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyBudgetScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyBudgetScreen(account)));
                       },
                       child: Text("Plan a budget", style: TextStyle( fontSize: 20,fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
                   GestureDetector(
