@@ -31,10 +31,11 @@ class _SpendingPatternScreenState extends State<SpendingPatternScreen> {
                         height: 115,
                         width: 115,
                         child: Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null ?
-                              loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
-                                  : null,
+                            child: Column(
+                              children: [
+                                Text("Loading Bar chart....", style: TextStyle(color: Constants.whiteColor, fontSize: 18),),
+                                CircularProgressIndicator(),
+                              ],
                             )
                         ),
                       );
