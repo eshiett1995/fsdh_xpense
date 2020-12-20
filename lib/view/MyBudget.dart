@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:fsdh_xpense/components/BankCard.dart';
 import 'package:fsdh_xpense/components/CustomDialogBox.dart';
 import 'package:fsdh_xpense/utilities/Constants.dart';
+import 'package:fsdh_xpense/view/CreateBudgetScreen.dart';
 import 'package:fsdh_xpense/view/MyExpensesScreen.dart';
 import 'package:fsdh_xpense/view/SpendingPatternScreen.dart';
 
@@ -29,23 +30,7 @@ class _MyBudgetScreenState extends State<MyBudgetScreen> {
         child: Icon(Icons.add),
         backgroundColor: Constants.secondaryColor,
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomDialogBox(
-                  icon: "assets/images/bell-ring.png",
-                  title: "Choose a provider",
-                  descriptions:
-                  "A provider helps you connect\nyour banking bank accounts seamlessly\nwith us\n",
-                  buttonText: "Connect with Okra",
-                  onConfirm: (){},
-                  cancelText: "Automatically Generate",
-                  onCancel: (){
-
-                  },
-                  color: Constants.secondaryColor,
-                );
-              });
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateBudgetScreen()));
         },
       ),
     );

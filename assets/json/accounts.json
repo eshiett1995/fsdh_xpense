@@ -1,0 +1,24 @@
+{
+  "accounts" : [
+    {
+      "id" : 1,
+      "name" : "Idaboski Bahose",
+      "nuban": "21003485757",
+      "cardNumber" : "5055 5050 5050 5050 5050",
+      "expiry" : "06/24",
+      "balance": "20000",
+      "bank": "GT bank",
+      "selected" : false
+    },
+    {
+      "id" : 2,
+      "name" : "Leverage Prince",
+      "nuban": "00003485757",
+      "cardNumber" : "5099 5050 9999 5050 6666",
+      "expiry" : "06/24",
+      "balance": "20000",
+      "bank": "Zenith bank",
+      "selected" : false
+    }
+  ]
+}
