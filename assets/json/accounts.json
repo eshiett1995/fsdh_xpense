@@ -6,7 +6,7 @@
       "nuban": "21003485757",
       "cardNumber" : "5055 5050 5050 5050 5050",
       "expiry" : "06/24",
-      "balance": "20000",
+      "balance": 20000.00,
       "bank": "GT bank",
       "selected" : false
     },
@@ -16,7 +16,7 @@
       "nuban": "00003485757",
       "cardNumber" : "5099 5050 9999 5050 6666",
       "expiry" : "06/24",
-      "balance": "20000",
+      "balance": 20000.00,
       "bank": "Zenith bank",
       "selected" : false
     }

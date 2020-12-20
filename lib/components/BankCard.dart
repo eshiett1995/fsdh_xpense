@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fsdh_xpense/models/Account.dart';
 import 'package:fsdh_xpense/utilities/Constants.dart';
 
 class BankCard extends StatelessWidget {
 
   final Function onTap;
+  final Account account;
 
-  const BankCard({Key key, this.onTap}) : super(key: key);
+  const BankCard({Key key, this.onTap, this.account}) : super(key: key);
 
 
 
@@ -32,10 +34,10 @@ class BankCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text("Gaurantee Trust Bank", style: TextStyle(fontWeight: FontWeight.bold, color: Constants.whiteColor),),
+            Text(this.account.bank, style: TextStyle(fontWeight: FontWeight.bold, color: Constants.whiteColor),),
             Align(
                 alignment: Alignment.centerLeft,
-                child: Text("5040 8094 4323 4984 4040", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
+                child: Text(this.account.cardNumber, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,10 +49,10 @@ class BankCard extends StatelessWidget {
                   children: [
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("N2,000,000", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
+                        child: Text("N${this.account.balance}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
                     Align(
                         alignment: Alignment.centerRight,
-                        child: Text("06/24", style: TextStyle(fontWeight: FontWeight.w500, color: Constants.whiteColor),)),
+                        child: Text(this.account.expiry, style: TextStyle(fontWeight: FontWeight.w500, color: Constants.whiteColor),)),
                   ],
                 ),
               ],

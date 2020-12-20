@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fsdh_xpense/models/Account.dart';
 import 'package:fsdh_xpense/view/LoginScreen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main()  async{
+  await Hive.initFlutter();
+  Hive.registerAdapter(AccountAdapter());
+  await Hive.openBox<Account>('accounts');
+
   runApp(MyApp());
 }
 

@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   isLoading: this.isLoading,
                   onPressed: () async{
                     try{
-                      setState(() => this.isLoading = true);
                       if(_formKey.currentState.validate()) {
+                        setState(() => this.isLoading = true);
                         Future.delayed(const Duration(milliseconds: 2500), () {
                           setState(() =>this.isLoading = false);
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeScreen()));

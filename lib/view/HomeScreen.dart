@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:fsdh_xpense/components/BankCard.dart';
 import 'package:fsdh_xpense/components/CustomDialogBox.dart';
+import 'package:fsdh_xpense/models/Account.dart';
 import 'package:fsdh_xpense/utilities/Constants.dart';
 import 'package:fsdh_xpense/view/MyExpensesScreen.dart';
 import 'package:fsdh_xpense/view/SpendingPatternScreen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'MyBudget.dart';
 
@@ -24,7 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: _displayBanksConnected(context),
+      body: ValueListenableBuilder(
+          valueListenable: Hive.box<Account>("accounts").listenable(),
+          builder:(builder, Box<Account> box, widget){
+            return box.values.length == 0 ? _noBanksConnected() : _displayBanksConnected(context, box);
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         // isExtended: true,
@@ -42,8 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   buttonText: "Connect with Okra",
                   onConfirm: (){},
                   cancelText: "Automatically Generate",
-                  onCancel: (){
-
+                  onCancel: () async{
+                       print("hehe");
+                       String jsonString = await rootBundle.loadString("assets/json/accounts.json");
+                       final jsonResponse = jsonDecode(jsonString);
+                       var accountsJson = jsonResponse["accounts"] as List;
+                       List<Account> accounts = accountsJson.map((i) => Account.fromJson(i)).toList();
+                       var accountBox = Hive.box<Account>("accounts");
+                       Account account = accounts.elementAt(accountBox.values.length)..selected = true;
+                       accountBox.put(account.id, account);
                   },
                   color: Constants.secondaryColor,
                 );
@@ -64,19 +81,20 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _displayBanksConnected(BuildContext context){
+  Widget _displayBanksConnected(BuildContext context, Box<Account> box){
     return Container(
       margin: EdgeInsets.only(top: 30),
       child: ListView.builder(
-          itemCount: 2,
+          itemCount: box.values.length,
           itemBuilder: (BuildContext context,int index){
-            return BankCard(onTap: () =>_modalBottomSheetMenu(context));
+            Account account = box.values.elementAt(index);
+            return BankCard(onTap: () =>_modalBottomSheetMenu(context, account), account: account);
           }
       ),
     );
   }
 
-  void _modalBottomSheetMenu(BuildContext context){
+  void _modalBottomSheetMenu(BuildContext context, Account account){
     showModalBottomSheet(
         context: context,
         shape : RoundedRectangleBorder(
@@ -108,7 +126,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => SpendingPatternScreen()));
                     },
                       child: Text("View spending pattern", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
-                  Text("Remove account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Constants.whiteColor),),
+                  GestureDetector(
+                    onTap: (){
+                      account.delete();
+                    },
+                      child: Text("Remove account", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Constants.whiteColor),)),
                 ],
               ),
             ),
